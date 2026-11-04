@@ -217,10 +217,10 @@ export async function renameBudget(
   const file = await readLibrary(paths);
   const entry = file.entries.find((candidate) => candidate.id === id);
   if (!entry) throw new LibraryError("missing", "That budget is no longer in the library");
-  const loaded = await loadWithFallback(paths, entry);
-  loaded.doc.rename(name.trim());
-  await writeBudgetDocument(entry.path, loaded.doc);
-  const next = { ...entry, name: name.trim() };
+  const opened = await openBudget(paths, id);
+  opened.doc.rename(name.trim());
+  await writeBudgetDocument(opened.entry.path, opened.doc);
+  const next = { ...opened.entry, name: name.trim() };
   await putEntry(paths, next);
   return next;
 }

@@ -1,4 +1,5 @@
 import { Command, Plus, Redo2, Undo2, Upload } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { AccountDialog } from "../accounts/AccountDialog";
 import { AccountsView } from "../accounts/AccountsView";
@@ -12,6 +13,7 @@ import { PayeesView } from "../payees/PayeesView";
 import { MoveMoneyDialog } from "../plan/MoveMoneyDialog";
 import { PlanView } from "../plan/PlanView";
 import { TargetDialog } from "../plan/TargetDialog";
+import { getBridge } from "../platform/bridge";
 import { ReportsView } from "../reports/ReportsView";
 import { RulesView } from "../rules/RulesView";
 import { SchedulesView } from "../schedules/SchedulesView";
@@ -59,6 +61,7 @@ export function Shell({
           <span className="text-faint">/</span>
           <span className="text-[12px] font-medium text-ink">{TITLES[view]}</span>
           <div className="ml-auto flex items-center gap-1">
+            <SaveStatus />
             <IconButton
               label="Undo"
               icon={<Undo2 size={15} />}
@@ -120,5 +123,34 @@ export function Shell({
       <ImportWizard />
       <CommandPalette onCloseBudget={onCloseBudget} />
     </div>
+  );
+}
+
+function SaveStatus() {
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let alive = true;
+    const check = async (): Promise<void> => {
+      try {
+        const info = await getBridge().info();
+        if (alive) setError(info.saveError ?? null);
+      } catch {
+        // No open budget yet; the next tick tries again.
+      }
+    };
+    void check();
+    const timer = setInterval(() => void check(), 2000);
+    return () => {
+      alive = false;
+      clearInterval(timer);
+    };
+  }, []);
+
+  if (!error) return null;
+  return (
+    <span role="alert" title={error} className="mr-1 text-[11px] text-danger">
+      Save failed
+    </span>
   );
 }
