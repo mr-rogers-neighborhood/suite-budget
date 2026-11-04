@@ -1,0 +1,49 @@
+{
+  "name": "suite-budget",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.17.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @suite/budget dev",
+    "build": "pnpm --filter @suite/budget build",
+    "preview": "pnpm --filter @suite/budget preview",
+    "package": "pnpm --filter @suite/budget package",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:changed": "vitest run --changed",
+    "storybook": "pnpm --filter @suite/budget storybook",
+    "build-storybook": "pnpm --filter @suite/budget build-storybook",
+    "e2e:smoke": "pnpm --filter @suite/budget e2e:smoke",
+    "shape": "node scripts/check-shape.mjs",
+    "knip": "knip",
+    "check": "biome check . && pnpm typecheck && vitest run --changed && pnpm shape",
+    "verify": "biome check . && pnpm typecheck && vitest run && pnpm shape && pnpm knip && pnpm build && pnpm build-storybook",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.6.5",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^24.10.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "husky": "^9.1.7",
+    "jsdom": "^30.1.3",
+    "knip": "^6.44.1",
+    "typescript": "~5.9.3",
+    "vitest": "^5.1.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs,cjs,json,jsonc,css}": "biome check --write"
+  },
+  "license": "MIT"
+}

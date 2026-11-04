@@ -1,0 +1,15 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "project": ["scripts/**/*.mjs"]
+    },
+    "packages/core": {
+      "project": ["src/**/*.ts"]
+    },
+    "apps/desktop": {
+      "project": ["src/**/*.{ts,tsx}", ".storybook/**/*.ts", "e2e/**/*.ts"]
+    }
+  },
+  "ignoreDependencies": ["tailwindcss", "loro-crdt"]
+}

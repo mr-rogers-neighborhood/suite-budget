@@ -1,0 +1,16 @@
+export const ROOTS = {
+  meta: "meta",
+  settings: "settings",
+  accounts: "accounts",
+  categoryGroups: "categoryGroups",
+  categories: "categories",
+  targets: "targets",
+  monthlyBudgets: "monthlyBudgets",
+  transactions: "transactions",
+  payees: "payees",
+  rules: "rules",
+  schedules: "schedules",
+  reconciliations: "reconciliations",
+  dashboards: "dashboards",
+  widgets: "widgets",
+} as const;

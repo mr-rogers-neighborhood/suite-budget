@@ -1,0 +1,30 @@
+node_modules/
+dist/
+out/
+build/
+coverage/
+storybook-static/
+.vite/
+.turbo/
+*.tsbuildinfo
+
+# Local budget data
+*.budget
+*.budget.tmp
+*.budget.bak
+library.json
+
+# Test and packaging output
+test-results/
+playwright-report/
+release/
+blob-report/
+
+# Local configuration and scratch work
+.env
+.env.*
+!.env.example
+.scratchpad.md
+.DS_Store
+Thumbs.db
+*.log
