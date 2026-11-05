@@ -217,6 +217,9 @@ importers:
       '@suite/budget-core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@suite/contracts':
+        specifier: git+https://github.com/mr-rogers-neighborhood/suite-start.git#v0.2.0&path:/packages/contracts
+        version: https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/1907197274e3dcf50c733bc4008e8f754f7eedb1#path:/packages/contracts
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1885,6 +1888,10 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  '@suite/contracts@https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/1907197274e3dcf50c733bc4008e8f754f7eedb1#path:/packages/contracts':
+    resolution: {gitHosted: true, integrity: sha512-gtMRAiPs68F70pIUxquFaunpU7wDwAH18Ybz6+aopRhND6uA4hHIKPlL11VWVqlUD+/4uRk4zVmWhBSnJtyYpg==, path: /packages/contracts, tarball: https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/1907197274e3dcf50c733bc4008e8f754f7eedb1}
+    version: 0.1.0
 
   '@szmarczak/http-timer@4.0.6':
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
@@ -5376,6 +5383,10 @@ snapshots:
       typescript: 5.9.3
     transitivePeerDependencies:
       - supports-color
+
+  '@suite/contracts@https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/1907197274e3dcf50c733bc4008e8f754f7eedb1#path:/packages/contracts':
+    dependencies:
+      zod: 4.6.7
 
   '@szmarczak/http-timer@4.0.6':
     dependencies:

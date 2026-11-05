@@ -2,7 +2,7 @@ import { app, BrowserWindow } from "electron";
 
 import { registerIpc } from "./ipc";
 
-import { ensureDirs, importFromPath, toOpenInfo } from "./library";
+import { adoptLegacyBudgets, ensureDirs, openFromPath, toOpenInfo } from "./library";
 import { installMenu } from "./menu";
 import { appPaths } from "./paths";
 import { closeSession, openSession } from "./session";
@@ -17,6 +17,23 @@ if (process.env.SUITE_BUDGET_USER_DATA) {
 let mainWindow: BrowserWindow | null = null;
 let cleanedUp = false;
 const pendingFiles: string[] = [];
+
+/**
+ * A budget path the process was started with, which is how the hub hands a file over.
+ *
+ * The operating system's `open-file` event is not sent for an argument, so reading `argv` here is what
+ * makes a row in Start's Files pane open what it says it opens.
+ */
+function budgetFromArgv(argv: readonly string[]): string | null {
+  for (const argument of argv.slice(1)) {
+    if (argument.startsWith("-")) continue;
+    if (/\.(budget|json)$/iu.test(argument)) return argument;
+  }
+  return null;
+}
+
+const coldStart = budgetFromArgv(process.argv);
+if (coldStart) pendingFiles.push(coldStart);
 
 const gotLock = app.requestSingleInstanceLock();
 
@@ -61,6 +78,8 @@ if (!gotLock) {
 
 async function bootstrap(): Promise<void> {
   const paths = appPaths();
+  // Before the folders are created: this is what moves budgets written before the convention.
+  await adoptLegacyBudgets(paths);
   await ensureDirs(paths);
   applyContentSecurityPolicy();
   registerIpc();
@@ -93,7 +112,7 @@ function focusWindow(): void {
 async function openExternal(path: string): Promise<void> {
   const paths = appPaths();
   try {
-    const result = await importFromPath(paths, path);
+    const result = await openFromPath(paths, path);
     await openSession(paths, result.entry, result.doc);
     const info = toOpenInfo(result.entry, result.doc);
     for (const window of BrowserWindow.getAllWindows()) {

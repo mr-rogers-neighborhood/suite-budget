@@ -9,9 +9,8 @@ import {
   encodeBudgetFile,
   type LibraryEntry,
 } from "@suite/budget-core";
-
+import type { AppPaths } from "./budgetLocation";
 import { backupCurrent, exportRecordsText, writeBudgetDocument } from "./library";
-import type { AppPaths } from "./paths";
 
 /**
  * Owns the authoritative document while a budget is open. Renderer edits arrive as CRDT

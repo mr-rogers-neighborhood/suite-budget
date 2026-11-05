@@ -13,6 +13,7 @@ test("creates a budget, assigns a category, and restores it", async () => {
       env: {
         ...process.env,
         SUITE_BUDGET_USER_DATA: userData,
+        SUITE_BUDGET_LIBRARY: join(userData, "documents"),
         ELECTRON_DISABLE_SECURITY_WARNINGS: "1",
       },
     });

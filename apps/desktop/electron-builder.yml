@@ -15,6 +15,11 @@ files:
 extraResources:
   - from: resources
     to: .
+# The hub discovers an app by the manifest beside its executable, so this lands next to the
+# binary rather than in resources.
+extraFiles:
+  - from: suite.app.json
+    to: suite.app.json
 
 fileAssociations:
   - ext: budget

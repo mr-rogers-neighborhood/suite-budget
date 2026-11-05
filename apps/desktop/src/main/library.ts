@@ -27,7 +27,13 @@ import {
 } from "@suite/budget-core";
 import { z } from "zod";
 
-import { type AppPaths, backupDir, budgetPath } from "./paths";
+import {
+  type AppPaths,
+  backupDir,
+  budgetPath,
+  legacyBudgetsDir,
+  relativeTo,
+} from "./budgetLocation";
 import { recoverFile } from "./recovery";
 
 const entrySchema = z.object({
@@ -62,6 +68,49 @@ export async function ensureDirs(paths: AppPaths): Promise<void> {
   await mkdir(paths.budgetsDir, { recursive: true });
   await mkdir(paths.backupsDir, { recursive: true });
   await mkdir(paths.recoveredDir, { recursive: true });
+}
+
+async function fileExists(path: string): Promise<boolean> {
+  try {
+    await stat(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Copy budgets written before the documents convention into its folder.
+ *
+ * Runs once: a budget already there is left alone, and an entry whose stored path pointed into the old
+ * directory is rewritten to the new one. The old directory stays where it is, because a migration that
+ * deletes the only copy on a hunch is how a person loses a year of records.
+ */
+export async function adoptLegacyBudgets(paths: AppPaths): Promise<number> {
+  const legacy = legacyBudgetsDir(paths);
+  if (legacy === paths.budgetsDir) return 0;
+
+  const names = await readdir(legacy).catch((): string[] => []);
+  let copied = 0;
+  for (const name of names) {
+    if (!name.endsWith(".budget")) continue;
+    const target = join(paths.budgetsDir, name);
+    if (await fileExists(target)) continue;
+    await mkdir(paths.budgetsDir, { recursive: true });
+    await copyFile(join(legacy, name), target);
+    copied += 1;
+  }
+
+  const library = await readLibrary(paths);
+  let changed = false;
+  const entries = library.entries.map((entry) => {
+    const below = relativeTo(entry.path, legacy);
+    if (below === null) return entry;
+    changed = true;
+    return { ...entry, path: join(paths.budgetsDir, below) };
+  });
+  if (changed) await writeLibrary(paths, { ...library, entries });
+  return copied;
 }
 
 async function readLibrary(paths: AppPaths): Promise<LibraryFile> {
@@ -232,6 +281,23 @@ export async function removeBudget(paths: AppPaths, id: string): Promise<void> {
     throw new LibraryError("missing", "That budget is no longer in the library");
   }
   await writeLibrary(paths, { version: 1, entries });
+}
+
+/**
+ * Open a file a person or the hub handed over.
+ *
+ * A budget that is already in the folder is opened where it is; anything else is imported, which copies
+ * it in. Without the first branch, opening the same file twice would leave two budgets with one name.
+ */
+export async function openFromPath(
+  paths: AppPaths,
+  sourcePath: string,
+  now: Date = new Date(),
+): Promise<{ entry: LibraryEntry; doc: BudgetDocument; usedBackup?: string }> {
+  const library = await readLibrary(paths);
+  const existing = library.entries.find((entry) => entry.path === sourcePath);
+  if (existing) return openBudget(paths, existing.id, now);
+  return importFromPath(paths, sourcePath, now);
 }
 
 export function toOpenInfo(entry: LibraryEntry, doc: BudgetDocument): OpenBudgetInfo {

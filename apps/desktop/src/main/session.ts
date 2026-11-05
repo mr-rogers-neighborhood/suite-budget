@@ -1,7 +1,6 @@
 import type { BudgetDocument, LibraryEntry } from "@suite/budget-core";
-
+import type { AppPaths } from "./budgetLocation";
 import { BudgetStore } from "./budgetStore";
-import type { AppPaths } from "./paths";
 
 let current: BudgetStore | null = null;
 

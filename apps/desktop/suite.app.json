@@ -1,0 +1,11 @@
+{
+  "format": "suite.app",
+  "id": "budget",
+  "name": "Suite Budget",
+  "version": "0.1.0",
+  "contractVersion": "1.0.0",
+  "deepLinkPrefix": "suite://budget/",
+  "fileExtensions": ["budget"],
+  "protocols": ["suite-budget"],
+  "capabilities": ["document.file"]
+}

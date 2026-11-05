@@ -1,7 +1,7 @@
 import { cp, mkdir } from "node:fs/promises";
 import { basename, join } from "node:path";
 
-import type { AppPaths } from "./paths";
+import type { AppPaths } from "./budgetLocation";
 
 /** Copies a damaged budget aside; it is never overwritten or repaired in place. */
 export async function recoverFile(
