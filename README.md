@@ -55,8 +55,10 @@ xvfb-run -a pnpm e2e:smoke
 
 ## Your file
 
-- The app keeps a budget library at the Electron `userData` directory: `library.json`, `budgets/`,
-  `backups/`, and `recovered/`.
+- Budgets live in `~/Documents/Suite/Budget`, the suite's file-location convention, with the daily
+  backups beside them under `.backups/`. The library index (`library.json`) and `recovered/` stay in
+  the application directory, because they describe this machine rather than the documents.
+  `SUITE_BUDGET_LIBRARY` and `SUITE_BUDGET_DATA` move the two roots for a test or a portable install.
 - A `.budget` file is JSON containing a base64 Loro snapshot and its format/schema versions. It is
   readable by anyone who has the file. **Use OS disk encryption**; the app does not add a passphrase.
 - Every save is atomic (temp file → rename), keeps the previous copy, and keeps seven daily backups.
