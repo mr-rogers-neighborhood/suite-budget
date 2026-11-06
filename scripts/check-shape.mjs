@@ -72,10 +72,14 @@ for (const file of files) {
   }
 
   if (rel.startsWith("apps/") && !isTest) {
+    // `net.fetch` is not a network call: it is Electron's only way to read a
+    // `file:` URL, and the protocol handler that serves the renderer needs it.
+    // Everything else that fetches is.
+    const withoutFileReads = text.replace(/\bnet\.fetch\s*\(/gu, "net.readFileUrl(");
     if (
-      /\bfetch\s*\(/.test(text) ||
-      /\bXMLHttpRequest\b/.test(text) ||
-      /\bWebSocket\b/.test(text)
+      /\bfetch\s*\(/.test(withoutFileReads) ||
+      /\bXMLHttpRequest\b/.test(withoutFileReads) ||
+      /\bWebSocket\b/.test(withoutFileReads)
     ) {
       problems.push(`${rel}: the app makes no network calls`);
     }
