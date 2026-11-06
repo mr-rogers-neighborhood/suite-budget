@@ -55,3 +55,11 @@ mac:
 win:
   target:
     - nsis
+
+# The feed the app's updater reads, and the one the hub reads when a person asks.
+# `latest/download` is a stable redirect to the newest release's assets, so the
+# URL never has to be rewritten per version, and GitHub serves the manifest the
+# updater writes beside the artifacts.
+publish:
+  provider: generic
+  url: https://github.com/mr-rogers-neighborhood/suite-budget/releases/latest/download
