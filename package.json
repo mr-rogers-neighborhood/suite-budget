@@ -25,6 +25,7 @@
     "shape": "node scripts/check-shape.mjs",
     "knip": "knip",
     "check": "biome check . && pnpm typecheck && vitest run --changed && pnpm shape",
+    "check:full": "pnpm lint && pnpm typecheck && pnpm test && pnpm shape && pnpm knip && pnpm build",
     "verify": "biome check . && pnpm typecheck && vitest run && pnpm shape && pnpm knip && pnpm build && pnpm build-storybook",
     "prepare": "husky"
   },
