@@ -53,6 +53,13 @@ pnpm build
 xvfb-run -a pnpm e2e:smoke
 ```
 
+## Working on the whole suite
+
+The hub, the sync server and the three apps are developed together from
+[`suite-dev`](https://github.com/mr-rogers-neighborhood/suite-dev), which assumes the repositories are
+cloned side by side. It stages the real binaries, runs the hub and the sync server together, seeds a
+workspace, and owns the cross-app e2e suite. `pnpm preflight` there says what is missing.
+
 ## Your file
 
 - Budgets live in `~/Documents/Suite/Budget`, the suite's file-location convention, with the daily
