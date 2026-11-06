@@ -11,9 +11,9 @@ import { net, protocol } from "electron";
  * routes, the relative assets and the storage all keep working, and the page
  * cannot reach anything the policy does not name.
  */
-export const APP_SCHEME = "app";
-export const APP_HOST = "budget";
-export const APP_ORIGIN = `${APP_SCHEME}://${APP_HOST}`;
+const APP_SCHEME = "app";
+const APP_HOST = "budget";
+const APP_ORIGIN = `${APP_SCHEME}://${APP_HOST}`;
 export const APP_ENTRY = `${APP_ORIGIN}/index.html`;
 
 /**

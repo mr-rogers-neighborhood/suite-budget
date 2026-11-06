@@ -118,12 +118,12 @@ async function recordedFeed(options: UpdateCheckOptions): Promise<string | null>
 }
 
 /** The report's path inside an app's data directory. */
-export function reportPath(dataDir: string): string {
+function reportPath(dataDir: string): string {
   return join(dataDir, SUITE_UPDATE_STATE_FILE);
 }
 
 /** Write the report the hub reads. Failure is logged, never thrown: a report is a courtesy. */
-export async function writeReport(dataDir: string, state: SuiteUpdateState): Promise<void> {
+async function writeReport(dataDir: string, state: SuiteUpdateState): Promise<void> {
   try {
     await writeFile(reportPath(dataDir), `${JSON.stringify(state, null, 2)}\n`);
   } catch (error) {
