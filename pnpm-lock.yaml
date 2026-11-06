@@ -218,11 +218,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/core
       '@suite/contracts':
-        specifier: git+https://github.com/mr-rogers-neighborhood/suite-start.git#v0.4.0&path:/packages/contracts
-        version: https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/d27300d641cca948d30230f00a4f4636b6bb0595#path:/packages/contracts
+        specifier: git+https://github.com/mr-rogers-neighborhood/suite-start.git#v0.5.0&path:/packages/contracts
+        version: https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/b90e5004a94237aabc43053086b27f15a449f2e9#path:/packages/contracts
       '@suite/desktop':
-        specifier: git+https://github.com/mr-rogers-neighborhood/suite-start.git#v0.4.0&path:/packages/desktop
-        version: https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/d27300d641cca948d30230f00a4f4636b6bb0595#path:/packages/desktop
+        specifier: git+https://github.com/mr-rogers-neighborhood/suite-start.git#v0.5.0&path:/packages/desktop
+        version: https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/b90e5004a94237aabc43053086b27f15a449f2e9#path:/packages/desktop
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -1892,13 +1892,13 @@ packages:
       typescript:
         optional: true
 
-  '@suite/contracts@https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/d27300d641cca948d30230f00a4f4636b6bb0595#path:/packages/contracts':
-    resolution: {gitHosted: true, integrity: sha512-RbvJ/wNBxYGAbKUPIxfP68YARY6EOa+xw8bbpjWn1DVZQvr3xUwPh+bnHMROK7VuTcRkcXtCnW2fexLQksUCXA==, path: /packages/contracts, tarball: https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/d27300d641cca948d30230f00a4f4636b6bb0595}
-    version: 0.4.0
+  '@suite/contracts@https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/b90e5004a94237aabc43053086b27f15a449f2e9#path:/packages/contracts':
+    resolution: {gitHosted: true, integrity: sha512-KmldS97RfX9ZzOX/dAp9dqBikZQ7FniTkw4Agq3IFDmonidDbkgS/outV1Uh1HJEVpKsQwQCzkeU464/jVeAhA==, path: /packages/contracts, tarball: https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/b90e5004a94237aabc43053086b27f15a449f2e9}
+    version: 0.5.0
 
-  '@suite/desktop@https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/d27300d641cca948d30230f00a4f4636b6bb0595#path:/packages/desktop':
-    resolution: {gitHosted: true, integrity: sha512-RbvJ/wNBxYGAbKUPIxfP68YARY6EOa+xw8bbpjWn1DVZQvr3xUwPh+bnHMROK7VuTcRkcXtCnW2fexLQksUCXA==, path: /packages/desktop, tarball: https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/d27300d641cca948d30230f00a4f4636b6bb0595}
-    version: 0.4.0
+  '@suite/desktop@https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/b90e5004a94237aabc43053086b27f15a449f2e9#path:/packages/desktop':
+    resolution: {gitHosted: true, integrity: sha512-KmldS97RfX9ZzOX/dAp9dqBikZQ7FniTkw4Agq3IFDmonidDbkgS/outV1Uh1HJEVpKsQwQCzkeU464/jVeAhA==, path: /packages/desktop, tarball: https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/b90e5004a94237aabc43053086b27f15a449f2e9}
+    version: 0.5.0
 
   '@szmarczak/http-timer@4.0.6':
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
@@ -5391,11 +5391,11 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@suite/contracts@https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/d27300d641cca948d30230f00a4f4636b6bb0595#path:/packages/contracts':
+  '@suite/contracts@https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/b90e5004a94237aabc43053086b27f15a449f2e9#path:/packages/contracts':
     dependencies:
       zod: 4.6.7
 
-  '@suite/desktop@https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/d27300d641cca948d30230f00a4f4636b6bb0595#path:/packages/desktop': {}
+  '@suite/desktop@https://codeload.github.com/mr-rogers-neighborhood/suite-start/tar.gz/b90e5004a94237aabc43053086b27f15a449f2e9#path:/packages/desktop': {}
 
   '@szmarczak/http-timer@4.0.6':
     dependencies:
