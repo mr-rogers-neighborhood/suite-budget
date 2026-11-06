@@ -12,6 +12,19 @@ files:
   - out/**
   - package.json
 
+asar: true
+
+# The switches an attacker cannot turn back on after packaging.
+electronFuses:
+  runAsNode: false
+  enableCookieEncryption: true
+  enableNodeOptionsEnvironmentVariable: false
+  enableNodeCliInspectArguments: false
+  enableEmbeddedAsarIntegrityValidation: true
+  onlyLoadAppFromAsar: true
+  # Every page is served from a custom protocol now, so file:// needs no extra privileges.
+  grantFileProtocolExtraPrivileges: false
+
 extraResources:
   - from: resources
     to: .
@@ -24,7 +37,9 @@ extraFiles:
 fileAssociations:
   - ext: budget
     name: Suite Budget
-    mimeType: application/json
+    description: A Suite Budget file
+    role: Editor
+    mimeType: application/x-suite-budget
 
 linux:
   target:

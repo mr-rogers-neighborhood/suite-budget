@@ -1,13 +1,26 @@
 import { join } from "node:path";
 
+import { desktopCsp, isTrustedSender } from "@suite/desktop";
 import { BrowserWindow, session, shell } from "electron";
 
-export function applyContentSecurityPolicy(): void {
-  const dev = Boolean(process.env.ELECTRON_RENDERER_URL);
-  const policy = dev
-    ? "default-src 'self' 'unsafe-inline' data: blob: ws: http://localhost:*; script-src 'self' 'unsafe-inline' 'unsafe-eval';"
-    : "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self';";
+import { APP_ENTRY, pageOrigins } from "./protocol";
 
+/** The dev server needs its own origin and the evaluation the bundler uses. */
+export function pageCsp(dev: boolean): string {
+  return dev
+    ? desktopCsp({
+        scriptSrc: ["'unsafe-eval'"],
+        connectSrc: ["ws:", "http://localhost:*"],
+      })
+    : desktopCsp();
+}
+
+/**
+ * The policy for a page served over http (the dev server). A packaged window
+ * gets the same policy in the `app://` response headers.
+ */
+export function applyContentSecurityPolicy(): void {
+  const policy = pageCsp(Boolean(process.env.ELECTRON_RENDERER_URL));
   session.defaultSession.webRequest.onHeadersReceived((details, callback) => {
     callback({
       responseHeaders: {
@@ -40,13 +53,18 @@ export function createMainWindow(): BrowserWindow {
 
   window.once("ready-to-show", () => window.show());
   window.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith("https://")) void shell.openExternal(url);
+    if (url.startsWith("https://") || url.startsWith("http://")) void shell.openExternal(url);
     return { action: "deny" };
+  });
+  window.webContents.on("will-navigate", (event, url) => {
+    // Origins, not prefixes: `http://localhost:5173.evil.example` is a different
+    // host that merely starts with the dev server's address.
+    if (url !== APP_ENTRY && !isTrustedSender(url, pageOrigins())) event.preventDefault();
   });
 
   const devUrl = process.env.ELECTRON_RENDERER_URL;
   if (devUrl) void window.loadURL(devUrl);
-  else void window.loadFile(join(__dirname, "../renderer/index.html"));
+  else void window.loadURL(APP_ENTRY);
 
   return window;
 }

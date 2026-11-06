@@ -6,6 +6,5 @@
   "contractVersion": "1.0.0",
   "deepLinkPrefix": "suite://budget/",
   "fileExtensions": ["budget"],
-  "protocols": ["suite-budget"],
   "capabilities": ["document.file"]
 }

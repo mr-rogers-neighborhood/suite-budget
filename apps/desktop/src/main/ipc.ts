@@ -2,6 +2,8 @@ import { readFile, stat } from "node:fs/promises";
 import { join } from "node:path";
 
 import type { ExportFormat, OpenBudgetInfo } from "@suite/budget-core";
+import { isTrustedSender } from "@suite/desktop";
+
 import { app, BrowserWindow, dialog, ipcMain, type OpenDialogOptions, shell } from "electron";
 import { z } from "zod";
 
@@ -15,6 +17,7 @@ import {
   toOpenInfo,
 } from "./library";
 import { appPaths } from "./paths";
+import { pageOrigins } from "./protocol";
 import { closeSession, openSession, requireStore } from "./session";
 
 const startingAccountSchema = z.object({
@@ -40,19 +43,29 @@ const updateSchema = z.custom<Uint8Array>((value) => value instanceof Uint8Array
 });
 const formatSchema = z.enum(["json", "csv", "qif"]);
 
+function onIpc(
+  channel: string,
+  handler: (event: Electron.IpcMainInvokeEvent, ...args: unknown[]) => unknown,
+): void {
+  ipcMain.handle(channel, (event, ...args) => {
+    if (!isTrustedSender(event.senderFrame?.url, pageOrigins())) return undefined;
+    return handler(event, ...args);
+  });
+}
+
 export function registerIpc(): void {
   const paths = appPaths();
 
-  ipcMain.handle("library:list", () => listEntries(paths));
+  onIpc("library:list", () => listEntries(paths));
 
-  ipcMain.handle("library:create", async (_event, payload: unknown) => {
+  onIpc("library:create", async (_event, payload: unknown) => {
     const input = createBudgetSchema.parse(payload);
     const result = await createBudget(paths, input);
     await openSession(paths, result.entry, result.doc);
     return toOpenInfo(result.entry, result.doc);
   });
 
-  ipcMain.handle("library:open", async (_event, payload: unknown) => {
+  onIpc("library:open", async (_event, payload: unknown) => {
     const { id } = idSchema.parse(payload);
     const result = await openBudget(paths, id);
     await openSession(paths, result.entry, result.doc);
@@ -62,7 +75,7 @@ export function registerIpc(): void {
       : info;
   });
 
-  ipcMain.handle(
+  onIpc(
     "library:import",
     async (event): Promise<{ canceled: boolean; opened?: OpenBudgetInfo }> => {
       const filePath = await pickBudgetFile(event);
@@ -73,40 +86,40 @@ export function registerIpc(): void {
     },
   );
 
-  ipcMain.handle("library:close", async () => {
+  onIpc("library:close", async () => {
     await closeSession();
   });
 
-  ipcMain.handle("library:remove", async (_event, payload: unknown) => {
+  onIpc("library:remove", async (_event, payload: unknown) => {
     const { id } = idSchema.parse(payload);
     const store = requireStoreIfOpen();
     if (store?.entry.id === id) throw new Error("Close the budget before removing it");
     await removeBudget(paths, id);
   });
 
-  ipcMain.handle("library:reveal", async (_event, payload: unknown) => {
+  onIpc("library:reveal", async (_event, payload: unknown) => {
     const { id } = idSchema.parse(payload);
     const entry = (await listEntries(paths)).find((candidate) => candidate.id === id);
     if (entry) shell.showItemInFolder(entry.path);
   });
 
-  ipcMain.handle("library:rename", async (_event, payload: unknown) => {
+  onIpc("library:rename", async (_event, payload: unknown) => {
     const { id, name } = renameSchema.parse(payload);
     const store = requireStoreIfOpen();
     if (store?.entry.id === id) throw new Error("Close the budget before renaming it");
     return renameBudget(paths, id, name);
   });
 
-  ipcMain.handle("budget:snapshot", () => requireStore().snapshot());
-  ipcMain.handle("budget:commit", (_event, payload: unknown) => {
+  onIpc("budget:snapshot", () => requireStore().snapshot());
+  onIpc("budget:commit", (_event, payload: unknown) => {
     requireStore().commit(updateSchema.parse(payload));
   });
-  ipcMain.handle("budget:info", () => {
+  onIpc("budget:info", () => {
     const store = requireStore();
     return { ...store.info(), saveError: store.saveError };
   });
 
-  ipcMain.handle("budget:export", async (event) => {
+  onIpc("budget:export", async (event) => {
     const store = requireStore();
     const filePath = await pickSaveTarget(event, {
       title: "Export budget",
@@ -121,7 +134,7 @@ export function registerIpc(): void {
     return { canceled: false, path: filePath };
   });
 
-  ipcMain.handle("budget:export-records", async (event, payload: unknown) => {
+  onIpc("budget:export-records", async (event, payload: unknown) => {
     const format = formatSchema.parse(payload) as ExportFormat;
     const store = requireStore();
     const extension = format === "json" ? "json" : format;
@@ -138,7 +151,7 @@ export function registerIpc(): void {
     return { canceled: false, path: filePath };
   });
 
-  ipcMain.handle("import:read", async (event) => {
+  onIpc("import:read", async (event) => {
     const filePath = await pickImportSource(event);
     if (!filePath) return { canceled: true };
     const info = await stat(filePath);
@@ -149,7 +162,7 @@ export function registerIpc(): void {
     return { canceled: false, name: filePath.split(/[\\/]/).pop() ?? filePath, text };
   });
 
-  ipcMain.handle("app:platform", () => process.platform);
+  onIpc("app:platform", () => process.platform);
 }
 
 function requireStoreIfOpen() {

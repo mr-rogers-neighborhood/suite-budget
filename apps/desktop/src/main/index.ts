@@ -1,14 +1,20 @@
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
 import { app, BrowserWindow } from "electron";
-
+import { budgetFromArgv } from "./budgetLocation";
 import { registerIpc } from "./ipc";
-
 import { adoptLegacyBudgets, ensureDirs, openFromPath, toOpenInfo } from "./library";
 import { installMenu } from "./menu";
 import { appPaths } from "./paths";
+import { registerAppScheme, serveRenderer } from "./protocol";
 import { closeSession, openSession } from "./session";
-import { applyContentSecurityPolicy, createMainWindow } from "./window";
+import { applyContentSecurityPolicy, createMainWindow, pageCsp } from "./window";
 
 app.setName("Suite Budget");
+
+// Before `ready`: a scheme cannot be registered as privileged afterwards.
+registerAppScheme();
 
 if (process.env.SUITE_BUDGET_USER_DATA) {
   app.setPath("userData", process.env.SUITE_BUDGET_USER_DATA);
@@ -18,21 +24,12 @@ let mainWindow: BrowserWindow | null = null;
 let cleanedUp = false;
 const pendingFiles: string[] = [];
 
-/**
- * A budget path the process was started with, which is how the hub hands a file over.
- *
- * The operating system's `open-file` event is not sent for an argument, so reading `argv` here is what
- * makes a row in Start's Files pane open what it says it opens.
- */
-function budgetFromArgv(argv: readonly string[]): string | null {
-  for (const argument of argv.slice(1)) {
-    if (argument.startsWith("-")) continue;
-    if (/\.(budget|json)$/iu.test(argument)) return argument;
-  }
-  return null;
+/** The budget the command line names, whether a path or a link the hub routed here. */
+function budgetFromCommandLine(argv: readonly string[]): string | null {
+  return budgetFromArgv(argv, appPaths().budgetsDir, existsSync);
 }
 
-const coldStart = budgetFromArgv(process.argv);
+const coldStart = budgetFromCommandLine(process.argv);
 if (coldStart) pendingFiles.push(coldStart);
 
 const gotLock = app.requestSingleInstanceLock();
@@ -42,7 +39,7 @@ if (!gotLock) {
 } else {
   app.on("second-instance", (_event, argv) => {
     focusWindow();
-    const candidate = argv.find((arg) => /\.(budget|json)$/i.test(arg));
+    const candidate = budgetFromCommandLine(argv);
     if (candidate) void openExternal(candidate);
   });
 
@@ -77,6 +74,10 @@ if (!gotLock) {
 }
 
 async function bootstrap(): Promise<void> {
+  serveRenderer(
+    join(__dirname, "../renderer"),
+    pageCsp(Boolean(process.env.ELECTRON_RENDERER_URL)),
+  );
   const paths = appPaths();
   // Before the folders are created: this is what moves budgets written before the convention.
   await adoptLegacyBudgets(paths);

@@ -9,7 +9,7 @@ const renderer = fileURLToPath(new URL("./src/renderer/src", import.meta.url));
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin({ exclude: ["@suite/budget-core"] })],
+    plugins: [externalizeDepsPlugin({ exclude: ["@suite/budget-core", "@suite/desktop"] })],
     resolve: { alias: { "@suite/budget-core": core } },
     build: {
       // The wasm-bindgen glue requires a snippet file next to the module; leave it to Node.
