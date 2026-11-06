@@ -1,7 +1,10 @@
 import type { AppCommand, ExportFormat } from "@suite/budget-core";
-import { app, BrowserWindow, dialog, Menu, type MenuItemConstructorOptions } from "electron";
+import { app, BrowserWindow, dialog, Menu, type MenuItemConstructorOptions, shell } from "electron";
 
 const isMac = process.platform === "darwin";
+
+/** Where "Support Suite…" goes. One line, so it can point at whatever page should take money. */
+const SUPPORT_URL = "https://github.com/mr-rogers-neighborhood/suite-budget";
 
 function send(command: AppCommand): void {
   BrowserWindow.getFocusedWindow()?.webContents.send("ui:command", command);
@@ -105,6 +108,13 @@ export function installMenu(): void {
           click: () => send("command-palette"),
         },
         { type: "separator" },
+        {
+          // The one ask in the product: a URL, no account, nothing gated.
+          label: "Support Suite…",
+          click: () => {
+            void shell.openExternal(SUPPORT_URL).catch(() => {});
+          },
+        },
         {
           label: "About Suite Budget",
           click: () => {
