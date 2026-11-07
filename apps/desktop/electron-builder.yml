@@ -1,7 +1,7 @@
 appId: run.suite.budget
 productName: Suite Budget
 executableName: suite-budget
-artifactName: "suite-budget-${version}-${os}-${arch}.${ext}"
+artifactName: suite-budget-${version}-${arch}.${ext}
 copyright: Copyright © Suite contributors
 
 directories:
