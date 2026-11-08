@@ -104,6 +104,8 @@ workspace, and owns the cross-app e2e suite. `pnpm preflight` there says what is
 - A damaged file is never overwritten: the app tries the newest backup, then opens recovery mode with a
   copy in `recovered/`.
 
+What changed, in a person's words rather than commits: [CHANGELOG.md](CHANGELOG.md).
+
 ## How it is built
 
 React 19 on Electron, one Loro CRDT document per budget, Zod-validated records, Tailwind v4 with Radix
