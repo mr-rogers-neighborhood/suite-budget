@@ -7,6 +7,26 @@ underneath enough to matter.
 
 No changes yet.
 
+## [0.2.0] - 2026-11-07
+
+### Added
+
+- **Three colour themes, each in light and dark.** Suite, Solarized in its two official variants,
+  and Warm. The sidebar offers a Theme list and a Brightness toggle, and the choice is remembered.
+- **A light mode that works.** The app could follow the desktop before, but had no way to be told
+  to.
+
+### Changed
+
+- The interface draws from the suite's shared palette. The chart series and the money colours are
+  theme roles now, so a preset decides them together with the rest of the interface.
+
+### Fixed
+
+- A primary button's label was hardcoded near-black, tuned to this app's own green — unreadable
+  on several presets.
+- A `Toast` component that was never rendered has been removed.
+
 ## [0.1.2] - 2026-11-07
 
 ### Fixed
