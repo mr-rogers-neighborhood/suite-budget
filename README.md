@@ -105,6 +105,7 @@ workspace, and owns the cross-app e2e suite. `pnpm preflight` there says what is
   copy in `recovered/`.
 
 What changed, in a person's words rather than commits: [CHANGELOG.md](CHANGELOG.md).
+Where accessibility stands, and what is checked by hand: [ACCESSIBILITY.md](ACCESSIBILITY.md).
 
 ## How it is built
 
