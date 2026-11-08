@@ -28,6 +28,10 @@ electronFuses:
 extraResources:
   - from: resources
     to: .
+  # The window's own icon: a desktop entry reads the theme, but `_NET_WM_ICON` — what a
+  # panel draws in the taskbar — comes from `BrowserWindow({ icon })` and nothing else.
+  - from: build/icon.png
+    to: icon.png
 # The hub discovers an app by the manifest beside its executable, so this lands next to the
 # binary rather than in resources.
 extraFiles:
@@ -42,6 +46,7 @@ fileAssociations:
     mimeType: application/x-suite-budget
 
 linux:
+  syncDesktopName: true
   target:
     - AppImage
     - deb

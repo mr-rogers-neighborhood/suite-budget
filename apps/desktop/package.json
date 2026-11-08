@@ -1,6 +1,7 @@
 {
   "name": "@suite/budget",
   "productName": "Suite Budget",
+  "desktopName": "suite-budget.desktop",
   "version": "0.1.0",
   "private": true,
   "main": "./out/main/index.js",
@@ -55,6 +56,5 @@
     "email": "maintainers@suite.run"
   },
   "license": "MIT",
-  "desktopName": "suite-budget",
   "homepage": "https://github.com/mr-rogers-neighborhood/suite-budget"
 }

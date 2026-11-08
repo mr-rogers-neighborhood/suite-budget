@@ -1,7 +1,7 @@
+import { existsSync } from "node:fs";
 import { join } from "node:path";
-
 import { desktopCsp, isTrustedSender } from "@suite/desktop";
-import { BrowserWindow, session, shell } from "electron";
+import { app, BrowserWindow, session, shell } from "electron";
 
 import { APP_ENTRY, pageOrigins } from "./protocol";
 
@@ -31,13 +31,29 @@ export function applyContentSecurityPolicy(): void {
   });
 }
 
+/**
+ * The window's own icon.
+ *
+ * A desktop entry draws its icon from the hicolor theme; a running window's taskbar icon is
+ * `_NET_WM_ICON`, which Chromium fills only when `BrowserWindow` is given one. Without it the
+ * panel shows Electron's logo beside this app's own entry.
+ */
+function windowIcon(): string | null {
+  const packaged = join(process.resourcesPath, "icon.png");
+  if (app.isPackaged && existsSync(packaged)) return packaged;
+  const source = join(app.getAppPath(), "build", "icon.png");
+  return existsSync(source) ? source : null;
+}
+
 export function createMainWindow(): BrowserWindow {
+  const icon = windowIcon();
   const window = new BrowserWindow({
     width: 1320,
     height: 860,
     minWidth: 1040,
     minHeight: 680,
     show: false,
+    ...(icon === null ? {} : { icon }),
     title: "Suite Budget",
     backgroundColor: "#0b0d12",
     autoHideMenuBar: false,
