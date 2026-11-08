@@ -41,7 +41,7 @@ export function applyContentSecurityPolicy(): void {
 function windowIcon(): string | null {
   const packaged = join(process.resourcesPath, "icon.png");
   if (app.isPackaged && existsSync(packaged)) return packaged;
-  const source = join(app.getAppPath(), "build", "icon.png");
+  const source = join(app.getAppPath(), "resources", "icon.png");
   return existsSync(source) ? source : null;
 }
 
