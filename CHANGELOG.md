@@ -7,6 +7,16 @@ underneath enough to matter.
 
 No changes yet.
 
+## [0.2.2] - 2026-11-08
+
+### Changed
+
+- The start screen is the shared one, the same centred card as Canvas and Planner. Import is a plain
+  button because Budget has one import path: a bank export.
+- The theme picker and the privacy line moved into the card's footer, where they sit under the
+  actions instead of competing with them.
+- Space and type come from `@suite/theme` tokens.
+
 ## [0.2.1] - 2026-11-07
 
 ### Changed
