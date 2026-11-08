@@ -1,7 +1,7 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import type { LibraryEntry } from "@suite/budget-core";
-import { Button } from "@suite/ui";
-import { FolderOpen, MoreHorizontal, Pencil, Plus, Trash2, Upload } from "lucide-react";
+import { Button, Launch, type LaunchRecent, PrivacyLine } from "@suite/ui";
+import { FolderOpen, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
 import { type ReactNode, useState } from "react";
 import { BudgetMark } from "../app/BudgetMark";
 import { IconButton } from "../components/IconButton";
@@ -32,113 +32,81 @@ export function BudgetLauncher({
   const [renaming, setRenaming] = useState<LibraryEntry | null>(null);
   const [removing, setRemoving] = useState<LibraryEntry | null>(null);
 
-  return (
-    <div className="flex h-screen flex-col bg-canvas">
-      <header className="flex items-center gap-3 border-b border-line px-8 py-5">
-        <BudgetMark size="md" />
-        <div>
-          <p className="text-[15px] font-semibold tracking-tight text-ink">Suite Budget</p>
-          <p className="text-[11px] text-faint">Local budgets · no account · no network</p>
-        </div>
-        <div className="ml-auto flex items-center gap-3">
-          <div className="w-[190px]">
-            <ThemePicker />
-          </div>
-          <Button onClick={onImport} disabled={busy}>
-            <Upload size={14} />
-            Import
-          </Button>
-          <Button variant="primary" onClick={() => setNewBudgetOpen(true)} disabled={busy}>
-            <Plus size={14} />
-            New budget
-          </Button>
-        </div>
-      </header>
+  const recents: LaunchRecent[] = entries.map((entry) => ({
+    id: entry.id,
+    name: entry.name,
+    detail: `${entry.currency} · opened ${formatWhen(entry.lastOpenedAt)}`,
+    action: (
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger asChild>
+          <IconButton label={`Actions for ${entry.name}`} icon={<MoreHorizontal size={16} />} />
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Portal>
+          <DropdownMenu.Content
+            sideOffset={4}
+            className="z-50 min-w-44 rounded-lg border border-line bg-panel p-1 shadow-xl"
+          >
+            <MenuItem icon={<FolderOpen size={14} />} onSelect={() => onOpen(entry.id)}>
+              Open
+            </MenuItem>
+            <MenuItem icon={<Pencil size={14} />} onSelect={() => setRenaming(entry)}>
+              Rename
+            </MenuItem>
+            <MenuItem icon={<FolderOpen size={14} />} onSelect={() => onReveal(entry.id)}>
+              Show in folder
+            </MenuItem>
+            <DropdownMenu.Separator className="my-1 h-px bg-line" />
+            <MenuItem icon={<Trash2 size={14} />} danger onSelect={() => setRemoving(entry)}>
+              Remove from library
+            </MenuItem>
+          </DropdownMenu.Content>
+        </DropdownMenu.Portal>
+      </DropdownMenu.Root>
+    ),
+  }));
 
-      <main className="scroll flex-1 overflow-y-auto px-8 py-8">
-        {entries.length === 0 ? (
-          <div className="mx-auto max-w-2xl rounded-2xl border border-dashed border-line bg-panel/50 p-10 text-center">
-            <h1 className="text-xl font-semibold text-ink">Start with the money you have</h1>
-            <p className="mx-auto mt-3 max-w-lg text-[13px] leading-relaxed text-muted">
-              A budget is a file on this machine. Give every dollar a job, import transactions from
-              your bank's CSV, and export everything whenever you want. No account, no server, no
-              telemetry.
-            </p>
-            <div className="mt-6 flex justify-center gap-2">
-              <Button variant="primary" onClick={() => setNewBudgetOpen(true)}>
-                <Plus size={14} />
-                Start a budget
-              </Button>
-              <Button onClick={onImport}>
-                <Upload size={14} />
-                Import a file
-              </Button>
+  return (
+    <>
+      <div className="flex min-h-screen items-center justify-center bg-canvas px-6 py-10">
+        <Launch
+          mark={<BudgetMark size="md" />}
+          title="Suite Budget"
+          tagline="A budget is a file on this machine."
+          hint="Give every dollar a job, or bring in the transactions your bank already exported."
+          actions={
+            <Button variant="primary" onClick={() => setNewBudgetOpen(true)} disabled={busy}>
+              <Plus size={14} />
+              New budget
+            </Button>
+          }
+          importOptions={[
+            {
+              label: "Bank export",
+              detail: "A CSV your bank gave you",
+              onSelect: onImport,
+            },
+          ]}
+          recents={recents}
+          onOpenRecent={(id) => onOpen(id)}
+          recentEmpty={
+            <div className="rounded-xl border border-dashed border-line bg-panel/50 px-6 py-8 text-center">
+              <p className="text-[13px] font-medium text-ink">No budgets yet</p>
+              <p className="mx-auto mt-1.5 max-w-sm text-[12px] leading-relaxed text-muted">
+                Start one and it becomes a file in your documents folder. Nothing leaves this
+                machine.
+              </p>
             </div>
-          </div>
-        ) : (
-          <div className="mx-auto max-w-3xl">
-            <h1 className="text-[13px] font-semibold uppercase tracking-wider text-faint">
-              Recent budgets
-            </h1>
-            <ul className="mt-3 divide-y divide-line overflow-hidden rounded-xl border border-line bg-panel">
-              {entries.map((entry) => (
-                <li key={entry.id} className="flex items-center gap-4 px-5 py-4">
-                  <button
-                    type="button"
-                    onClick={() => onOpen(entry.id)}
-                    disabled={busy}
-                    className="min-w-0 flex-1 text-left"
-                  >
-                    <p className="truncate text-[14px] font-medium text-ink">{entry.name}</p>
-                    <p className="mt-0.5 text-[11px] text-faint">
-                      {entry.currency} · opened {formatWhen(entry.lastOpenedAt)}
-                    </p>
-                  </button>
-                  <DropdownMenu.Root>
-                    <DropdownMenu.Trigger asChild>
-                      <IconButton
-                        label={`Actions for ${entry.name}`}
-                        icon={<MoreHorizontal size={16} />}
-                      />
-                    </DropdownMenu.Trigger>
-                    <DropdownMenu.Portal>
-                      <DropdownMenu.Content
-                        sideOffset={4}
-                        className="z-50 min-w-44 rounded-lg border border-line bg-panel p-1 shadow-xl"
-                      >
-                        <MenuItem icon={<FolderOpen size={14} />} onSelect={() => onOpen(entry.id)}>
-                          Open
-                        </MenuItem>
-                        <MenuItem icon={<Pencil size={14} />} onSelect={() => setRenaming(entry)}>
-                          Rename
-                        </MenuItem>
-                        <MenuItem
-                          icon={<FolderOpen size={14} />}
-                          onSelect={() => onReveal(entry.id)}
-                        >
-                          Show in folder
-                        </MenuItem>
-                        <DropdownMenu.Separator className="my-1 h-px bg-line" />
-                        <MenuItem
-                          icon={<Trash2 size={14} />}
-                          danger
-                          onSelect={() => setRemoving(entry)}
-                        >
-                          Remove from library
-                        </MenuItem>
-                      </DropdownMenu.Content>
-                    </DropdownMenu.Portal>
-                  </DropdownMenu.Root>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 text-[11px] leading-relaxed text-faint">
-              Removing a budget from the library leaves the file on disk. Closing the window quits
-              the app; there is no background service.
-            </p>
-          </div>
-        )}
-      </main>
+          }
+          footer={
+            <>
+              <div className="w-[190px]">
+                <ThemePicker />
+              </div>
+              <PrivacyLine />
+            </>
+          }
+        />
+      </div>
 
       <TextPrompt
         open={renaming !== null}
@@ -170,7 +138,7 @@ export function BudgetLauncher({
           setRemoving(null);
         }}
       />
-    </div>
+    </>
   );
 }
 
