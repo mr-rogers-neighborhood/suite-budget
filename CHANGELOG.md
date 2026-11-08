@@ -7,6 +7,20 @@ underneath enough to matter.
 
 No changes yet.
 
+## [0.2.1] - 2026-11-07
+
+### Changed
+
+- The interface wears the Budget glyph now, on the suite's accent tile, instead of a gradient
+  square.
+- **The theme control is on the first screen.** It was in the sidebar, which does not exist
+  until a budget is open, so the one screen everybody sees had no way to change the theme.
+
+### Fixed
+
+- The privacy claim uses the suite's shared sentence: "Local file. No account, no server, no
+  telemetry."
+
 ## [0.2.0] - 2026-11-07
 
 ### Added
