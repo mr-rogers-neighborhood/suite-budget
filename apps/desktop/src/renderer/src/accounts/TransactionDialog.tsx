@@ -6,10 +6,9 @@ import {
   type TransactionFlag,
   todayKey,
 } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { Plus, Trash2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-
-import { Button } from "../components/Button";
 import { CategoryPicker } from "../components/CategoryPicker";
 import { Field, TextInput } from "../components/Field";
 import { IconButton } from "../components/IconButton";

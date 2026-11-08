@@ -1,9 +1,8 @@
 import type { CreateBudgetInput, LibraryEntry, OpenBudgetInfo } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { useCallback, useEffect, useRef, useState } from "react";
-
 import { Shell } from "./app/Shell";
 import { Toast } from "./app/Toast";
-import { Button } from "./components/Button";
 import { Modal } from "./components/Modal";
 import { BudgetLauncher } from "./launcher/BudgetLauncher";
 import { NewBudgetDialog } from "./launcher/NewBudgetDialog";

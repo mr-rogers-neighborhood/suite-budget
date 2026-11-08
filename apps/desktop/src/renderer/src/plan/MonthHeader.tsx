@@ -1,8 +1,7 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { formatMoney, type MonthState, monthLabel } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { ChevronDown, ChevronLeft, ChevronRight, Plus, SlidersHorizontal } from "lucide-react";
-
-import { Button } from "../components/Button";
 import { IconButton } from "../components/IconButton";
 
 export type AutoAssignKind = "underfunded" | "last_month" | "average_spent" | "cover";

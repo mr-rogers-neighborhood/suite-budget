@@ -1,7 +1,6 @@
 import { type Account, formatMoney } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { CircleDollarSign, Pencil, Plus, Scale, Wallet } from "lucide-react";
-
-import { Button } from "../components/Button";
 import { EmptyState } from "../components/EmptyState";
 import { useReplica, useWorkspaceSnapshot } from "../store/snapshotStore";
 import { useUiStore } from "../store/uiStore";

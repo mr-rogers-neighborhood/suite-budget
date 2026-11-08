@@ -14,11 +14,10 @@ import {
   type Widget,
   type WidgetKind,
 } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { ArrowDown, ArrowUp, Plus, X } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-
 import { BarChart, BarList, LineChart, moneyFormatter, monthLabels, Stat } from "../charts/Charts";
-import { Button } from "../components/Button";
 import { useReplica, useWorkspaceSnapshot } from "../store/snapshotStore";
 import { useUiStore } from "../store/uiStore";
 

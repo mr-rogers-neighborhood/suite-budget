@@ -10,10 +10,9 @@ import {
   monthState,
   underfunded,
 } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { Plus } from "lucide-react";
 import { useMemo, useState } from "react";
-
-import { Button } from "../components/Button";
 import { EmptyState } from "../components/EmptyState";
 import { TextPrompt } from "../components/TextPrompt";
 import { useReplica, useWorkspaceSnapshot } from "../store/snapshotStore";

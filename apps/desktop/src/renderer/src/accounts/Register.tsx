@@ -1,8 +1,7 @@
 import { type Account, formatMoney, partsOfDateKey, type Transaction } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { CheckCircle2, ChevronRight, Lock, Plus, Search } from "lucide-react";
 import { useState } from "react";
-
-import { Button } from "../components/Button";
 import { EmptyState } from "../components/EmptyState";
 import { useReplica, useWorkspaceSnapshot } from "../store/snapshotStore";
 import { useUiStore } from "../store/uiStore";

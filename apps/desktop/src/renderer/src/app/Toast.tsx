@@ -1,38 +1,17 @@
-import { useEffect } from "react";
+import { Toast as SharedToast } from "@suite/ui";
 
 import { useUiStore } from "../store/uiStore";
 
+/**
+ * The app's toast, on the shared one.
+ *
+ * The store already holds `{ message, tone }` and the shared component takes the same shape, so
+ * there is no adapter — and the tone decides the ARIA role in one place rather than in each app
+ * that shows a message.
+ */
 export function Toast() {
   const notice = useUiStore((state) => state.notice);
   const clearNotice = useUiStore((state) => state.clearNotice);
 
-  useEffect(() => {
-    if (!notice) return;
-    const timer = setTimeout(clearNotice, 4500);
-    return () => clearTimeout(timer);
-  }, [notice, clearNotice]);
-
-  if (!notice) return null;
-  return (
-    <div
-      role={notice.tone === "error" ? "alert" : "status"}
-      className={
-        notice.tone === "error"
-          ? "fixed bottom-5 right-5 z-[70] max-w-md rounded-lg border border-danger/40 bg-panel px-4 py-3 text-[13px] text-danger shadow-2xl"
-          : "fixed bottom-5 right-5 z-[70] max-w-md rounded-lg border border-line bg-panel px-4 py-3 text-[13px] text-ink shadow-2xl"
-      }
-    >
-      <div className="flex items-start gap-3">
-        <p className="leading-relaxed">{notice.message}</p>
-        <button
-          type="button"
-          onClick={clearNotice}
-          className="text-[11px] text-faint hover:text-ink"
-          aria-label="Dismiss"
-        >
-          ×
-        </button>
-      </div>
-    </div>
-  );
+  return <SharedToast notice={notice} onDismiss={clearNotice} />;
 }

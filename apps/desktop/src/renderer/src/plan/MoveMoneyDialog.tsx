@@ -1,7 +1,6 @@
 import { formatMoney, monthState, moveMoney, parseMoney } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { useMemo, useState } from "react";
-
-import { Button } from "../components/Button";
 import { Field, TextInput } from "../components/Field";
 import { Modal } from "../components/Modal";
 import { useReplica, useWorkspaceSnapshot } from "../store/snapshotStore";

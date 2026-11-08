@@ -1,12 +1,11 @@
+import { Button } from "@suite/ui";
 import { Command, Plus, Redo2, Undo2, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
-
 import { AccountDialog } from "../accounts/AccountDialog";
 import { AccountsView } from "../accounts/AccountsView";
 import { ReconcileDialog } from "../accounts/ReconcileDialog";
 import { TransactionDialog } from "../accounts/TransactionDialog";
 import { CommandPalette } from "../command/CommandPalette";
-import { Button } from "../components/Button";
 import { IconButton } from "../components/IconButton";
 import { ImportWizard } from "../import/ImportWizard";
 import { PayeesView } from "../payees/PayeesView";

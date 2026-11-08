@@ -1,5 +1,6 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { type Account, formatMoney } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import {
   BarChart3,
   CalendarClock,
@@ -13,11 +14,10 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
-
-import { Button } from "../components/Button";
 import { IconButton } from "../components/IconButton";
 import { useReplica, useWorkspaceSnapshot } from "../store/snapshotStore";
 import { useUiStore } from "../store/uiStore";
+import { ThemePicker } from "../theme/ThemePicker";
 
 export function Sidebar({
   onCloseBudget,
@@ -178,6 +178,7 @@ export function Sidebar({
       </div>
 
       <div className="space-y-2 border-t border-line p-3">
+        <ThemePicker />
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
             <Button size="sm" className="w-full">

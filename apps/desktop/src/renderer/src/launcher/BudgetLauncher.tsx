@@ -1,9 +1,8 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import type { LibraryEntry } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { FolderOpen, MoreHorizontal, Pencil, Plus, Trash2, Upload } from "lucide-react";
 import { type ReactNode, useState } from "react";
-
-import { Button } from "../components/Button";
 import { IconButton } from "../components/IconButton";
 import { TextPrompt } from "../components/TextPrompt";
 import { useUiStore } from "../store/uiStore";

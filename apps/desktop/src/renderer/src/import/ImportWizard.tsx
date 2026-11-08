@@ -10,9 +10,8 @@ import {
   parseQif,
   type RuleDraft,
 } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { useEffect, useMemo, useRef, useState } from "react";
-
-import { Button } from "../components/Button";
 import { Field, TextInput } from "../components/Field";
 import { Modal } from "../components/Modal";
 import { getBridge } from "../platform/bridge";

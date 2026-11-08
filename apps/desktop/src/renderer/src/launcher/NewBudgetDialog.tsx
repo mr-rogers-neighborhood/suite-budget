@@ -5,9 +5,8 @@ import {
   parseMoney,
   type StarterTemplateId,
 } from "@suite/budget-core";
+import { Button } from "@suite/ui";
 import { useEffect, useState } from "react";
-
-import { Button } from "../components/Button";
 import { Field, TextInput } from "../components/Field";
 import { Modal } from "../components/Modal";
 

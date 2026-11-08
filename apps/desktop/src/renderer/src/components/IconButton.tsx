@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { IconButton as SharedIconButton } from "@suite/ui";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 export type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -6,19 +6,17 @@ export type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   icon: ReactNode;
 };
 
-export function IconButton({ label, icon, className, type = "button", ...props }: IconButtonProps) {
+/**
+ * A glyph button, on the shared one.
+ *
+ * This app passes its glyph as `icon=`; the shared component takes children. The wrapper is the
+ * whole difference — the accessible name, the size, the hover state and the focus ring come from
+ * `@suite/ui`, so there is one implementation to fix rather than two to keep in step.
+ */
+export function IconButton({ label, icon, ...props }: IconButtonProps) {
   return (
-    <button
-      type={type}
-      aria-label={label}
-      title={label}
-      className={clsx(
-        "inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-raised hover:text-ink disabled:opacity-40",
-        className,
-      )}
-      {...props}
-    >
+    <SharedIconButton label={label} {...props}>
       {icon}
-    </button>
+    </SharedIconButton>
   );
 }
