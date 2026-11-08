@@ -7,6 +7,7 @@ import { BudgetMark } from "../app/BudgetMark";
 import { IconButton } from "../components/IconButton";
 import { TextPrompt } from "../components/TextPrompt";
 import { useUiStore } from "../store/uiStore";
+import { ThemePicker } from "../theme/ThemePicker";
 
 export type BudgetLauncherProps = {
   entries: LibraryEntry[];
@@ -39,7 +40,10 @@ export function BudgetLauncher({
           <p className="text-[15px] font-semibold tracking-tight text-ink">Suite Budget</p>
           <p className="text-[11px] text-faint">Local budgets · no account · no network</p>
         </div>
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-3">
+          <div className="w-[190px]">
+            <ThemePicker />
+          </div>
           <Button onClick={onImport} disabled={busy}>
             <Upload size={14} />
             Import

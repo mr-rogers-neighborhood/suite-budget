@@ -1,6 +1,6 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { type Account, formatMoney } from "@suite/budget-core";
-import { Button } from "@suite/ui";
+import { Button, PrivacyLine } from "@suite/ui";
 import {
   BarChart3,
   CalendarClock,
@@ -55,6 +55,10 @@ export function Sidebar({
           </p>
           <p className="text-[10px] text-faint">Suite Budget</p>
         </div>
+      </div>
+
+      <div className="px-3 pb-2">
+        <ThemePicker />
       </div>
 
       <nav aria-label="Primary" className="flex flex-col gap-0.5 px-2">
@@ -179,7 +183,6 @@ export function Sidebar({
       </div>
 
       <div className="space-y-2 border-t border-line p-3">
-        <ThemePicker />
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
             <Button size="sm" className="w-full">
@@ -205,12 +208,7 @@ export function Sidebar({
         <Button size="sm" className="w-full" onClick={onCloseBudget}>
           All budgets
         </Button>
-        <p
-          className="truncate px-1 text-[10px] text-faint"
-          title="A local file; no server, no telemetry"
-        >
-          Local file · no network
-        </p>
+        <PrivacyLine className="px-1" />
       </div>
     </aside>
   );
