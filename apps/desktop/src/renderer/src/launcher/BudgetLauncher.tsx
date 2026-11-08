@@ -3,6 +3,7 @@ import type { LibraryEntry } from "@suite/budget-core";
 import { Button } from "@suite/ui";
 import { FolderOpen, MoreHorizontal, Pencil, Plus, Trash2, Upload } from "lucide-react";
 import { type ReactNode, useState } from "react";
+import { BudgetMark } from "../app/BudgetMark";
 import { IconButton } from "../components/IconButton";
 import { TextPrompt } from "../components/TextPrompt";
 import { useUiStore } from "../store/uiStore";
@@ -33,7 +34,7 @@ export function BudgetLauncher({
   return (
     <div className="flex h-screen flex-col bg-canvas">
       <header className="flex items-center gap-3 border-b border-line px-8 py-5">
-        <div className="h-7 w-7 rounded-[9px] bg-gradient-to-br from-[#4fbf8b] to-[#2a8f8f]" />
+        <BudgetMark size="md" />
         <div>
           <p className="text-[15px] font-semibold tracking-tight text-ink">Suite Budget</p>
           <p className="text-[11px] text-faint">Local budgets · no account · no network</p>

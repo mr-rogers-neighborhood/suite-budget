@@ -18,6 +18,7 @@ import { IconButton } from "../components/IconButton";
 import { useReplica, useWorkspaceSnapshot } from "../store/snapshotStore";
 import { useUiStore } from "../store/uiStore";
 import { ThemePicker } from "../theme/ThemePicker";
+import { BudgetMark } from "./BudgetMark";
 
 export function Sidebar({
   onCloseBudget,
@@ -47,7 +48,7 @@ export function Sidebar({
   return (
     <aside className="flex w-[236px] shrink-0 flex-col border-r border-line bg-panel">
       <div className="flex items-center gap-2.5 px-4 pb-4 pt-5">
-        <div className="h-6 w-6 rounded-[8px] bg-gradient-to-br from-[#4fbf8b] to-[#2a8f8f]" />
+        <BudgetMark size="sm" />
         <div className="min-w-0">
           <p className="truncate text-[13px] font-semibold tracking-tight text-ink">
             {snapshot.meta.name}
